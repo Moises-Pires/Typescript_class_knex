@@ -1,7 +1,8 @@
 import { IHttpResponse } from "../helpers/interface-helper";
 
-export interface IUseCaseGet {
+export interface IUseCaseClient {
   run(): Promise<IHttpResponse>;
+  save(body: IRequestField): Promise<IHttpResponse>;
 }
 
 export interface IUseCasePost {
@@ -16,6 +17,9 @@ export interface IRequestField {
 }
 
 export interface IIValidationYup {
+  validate(value: IRequestField): boolean;
+}
+export interface IIValidationEmail {
   validate(value: IRequestField): boolean;
 }
 
