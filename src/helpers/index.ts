@@ -14,3 +14,10 @@ export const serverError = (): IHttpResponse => {
     statusCode: 500,
   };
 };
+
+export const badRequest = (error: Error): IHttpResponse => {
+  return {
+    body: error,
+    statusCode: 400,
+  };
+};

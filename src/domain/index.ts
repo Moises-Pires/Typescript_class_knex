@@ -1,10 +1,11 @@
 import { UseRepository } from "../Repository/use-repository";
-import { UseCaseUser } from "./factory/userCase";
+import { UseCaseGetUser, UseCaseSaveUser } from "./factory/userCase";
 
 const userRepository = new UseRepository();
 
 const modulo = {
-  useCaseSearchAll: new UseCaseUser(userRepository),
+  useCaseSearchAll: new UseCaseGetUser(userRepository),
+  //useCaseSaveUser: new UseCaseSaveUser();
 };
 
 export default modulo;

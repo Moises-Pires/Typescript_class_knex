@@ -13,4 +13,8 @@ export class UserController implements IController {
       return res.status(serverError().statusCode).json(error.message);
     }
   }
+
+  async saveUser(req: Request, res: Response): Promise<Response> {
+    return;
+  }
 }
