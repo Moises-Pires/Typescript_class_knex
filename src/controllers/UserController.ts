@@ -1,13 +1,24 @@
-import { Request, Response } from "express";
-import { serverError, statusOk } from "./../helpers/index";
-import { IHttpResponse } from "../helpers/interface-helper";
-import { IController } from "./interfaceController";
-import modulo from "../domain";
+import { Request, Response } from 'express';
+import { badRequest, serverError } from './../helpers/index';
+import { IController } from './interfaceController';
+import modulo from '../domain';
+import { InvalidParamsError } from 'src/errors/Invalid-params-error';
 
 export class UserController implements IController {
-  async searchAll(req: Request, res: Response): Promise<Response> {
+  async searchAll(_req: Request, res: Response): Promise<Response> {
     try {
-      const { body, statusCode } = await modulo.useCaseSearchAll.run();
+      const { body, statusCode } = await modulo.useCaseUser.run();
+      return res.status(statusCode).json(body);
+    } catch (error) {
+      return res.status(serverError().statusCode).json(error.message);
+    }
+  }
+
+  async searchUser(req: Request, res: Response): Promise<Response> {
+    try {
+      const { id } = req.params;
+      if (id) res.status(400).json('parametros inválidoa');
+      const { body, statusCode } = await modulo.useCaseUser.index(Number(id));
       return res.status(statusCode).json(body);
     } catch (error) {
       return res.status(serverError().statusCode).json(error.message);
@@ -15,6 +26,36 @@ export class UserController implements IController {
   }
 
   async saveUser(req: Request, res: Response): Promise<Response> {
-    return;
+    try {
+      const { body, statusCode } = await modulo.useCaseUser.save(req.body);
+      return res.status(statusCode).json(body);
+    } catch (error) {
+      return res.status(serverError().statusCode).json(error.message);
+    }
+  }
+
+  async UpdateUser(req: Request, res: Response): Promise<Response> {
+    try {
+      const { id } = req.params;
+      if (id) res.status(400).json('parametros inválidoa');
+      const { body, statusCode } = await modulo.useCaseUser.update(
+        req.body,
+        Number(id)
+      );
+      return res.status(statusCode).json(body);
+    } catch (error) {
+      return res.status(serverError().statusCode).json(error.message);
+    }
+  }
+
+  async deleteUser(req: Request, res: Response): Promise<Response> {
+    try {
+      const { id } = req.params;
+      if (id) res.status(400).json('parametros inválidoa');
+      const { body, statusCode } = await modulo.useCaseUser.Delete(Number(id));
+      return res.status(statusCode).json(body);
+    } catch (error) {
+      return res.status(serverError().statusCode).json(error.message);
+    }
   }
 }

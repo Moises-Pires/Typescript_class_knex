@@ -7,4 +7,5 @@
     "baseUrl": "./",
     "esModuleInterop": true
   }
+  //"include": ["node_modules/@types", "test/**/**.ts"]
 }
