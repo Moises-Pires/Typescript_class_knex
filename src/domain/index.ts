@@ -1,9 +1,9 @@
-import { ValidatorEmail } from "./../utils/validations/validator-email";
-import { Bcrypt } from "./../utils/Bcript";
-import { ValidatorYup } from "./../utils/validations/Validator-yup";
+import { ValidatorEmail } from './../utils/validations/validator-email';
+import { Bcrypt } from './../utils/Bcript';
+import { ValidatorYup } from './../utils/validations/Validator-yup';
 
-import { UseRepository } from "../Repository/use-repository";
-import { UseCaseClient } from "./factory/userCase";
+import { UseRepository } from '../Repository/use-repository';
+import { UseCaseClient } from './factory/userCase';
 
 const userRepository = new UseRepository();
 const validatorYup = new ValidatorYup();
@@ -18,5 +18,4 @@ const modulo = {
     validatorEmail
   ),
 };
-
 export default modulo;
