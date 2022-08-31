@@ -29,6 +29,7 @@ export class UseCaseClient implements IUseCaseClient {
   async run(): Promise<IHttpResponse> {
     try {
       const result = await this.repository.userGetAll();
+      await result.map((item) => delete item.password);
       return statusOk(result);
     } catch (error: any) {
       return serverError();
@@ -38,6 +39,7 @@ export class UseCaseClient implements IUseCaseClient {
   async index(id: number): Promise<IHttpResponse> {
     try {
       const result = await this.repository.userGet(id);
+      delete result[0].password;
       return statusOk(result);
     } catch (error: any) {
       return serverError();
@@ -67,6 +69,13 @@ export class UseCaseClient implements IUseCaseClient {
 
       const { confirmePassword, ...newBody } = body;
       const bodyCorrect = { ...newBody, password: passwordBcrypt };
+      const existeEmail = await this.repository.userGetEmail(bodyCorrect.email);
+
+      if (existeEmail)
+        return badRequest(
+          new InvalidParamsError('O cadastro já existe em nossa base de dados')
+        );
+
       const resultRepository = await this.repository.userSave(bodyCorrect);
 
       return statusOk(resultRepository);
@@ -77,7 +86,10 @@ export class UseCaseClient implements IUseCaseClient {
 
   async update(body: IRequestField, id: number): Promise<IHttpResponse> {
     try {
-      const result = await this.repository.userUpdate(body, id);
+      const passwordBcrypt = await this.bcrypt.encrypt(body?.password);
+      const bodyCorrect = { ...body, password: passwordBcrypt };
+      const result = await this.repository.userUpdate(bodyCorrect, id);
+      delete result.password;
       return statusOk(result);
     } catch (error: any) {
       return serverError();

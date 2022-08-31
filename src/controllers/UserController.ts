@@ -1,8 +1,7 @@
 import { Request, Response } from 'express';
-import { badRequest, serverError } from './../helpers/index';
+import { serverError } from './../helpers/index';
 import { IController } from './interfaceController';
 import modulo from '../domain';
-import { InvalidParamsError } from 'src/errors/Invalid-params-error';
 
 export class UserController implements IController {
   async searchAll(_req: Request, res: Response): Promise<Response> {
@@ -15,9 +14,9 @@ export class UserController implements IController {
   }
 
   async searchUser(req: Request, res: Response): Promise<Response> {
+    const { id } = req.params;
     try {
-      const { id } = req.params;
-      if (id) res.status(400).json('parametros inválidoa');
+      if (!id) res.status(400).json('parametros inválidoa');
       const { body, statusCode } = await modulo.useCaseUser.index(Number(id));
       return res.status(statusCode).json(body);
     } catch (error) {
@@ -37,7 +36,7 @@ export class UserController implements IController {
   async UpdateUser(req: Request, res: Response): Promise<Response> {
     try {
       const { id } = req.params;
-      if (id) res.status(400).json('parametros inválidoa');
+      if (!id) res.status(400).json('parametros inválidoa');
       const { body, statusCode } = await modulo.useCaseUser.update(
         req.body,
         Number(id)
@@ -51,7 +50,7 @@ export class UserController implements IController {
   async deleteUser(req: Request, res: Response): Promise<Response> {
     try {
       const { id } = req.params;
-      if (id) res.status(400).json('parametros inválidoa');
+      if (!id) res.status(400).json('parametros inválidoa');
       const { body, statusCode } = await modulo.useCaseUser.Delete(Number(id));
       return res.status(statusCode).json(body);
     } catch (error) {

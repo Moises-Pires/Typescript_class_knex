@@ -12,6 +12,21 @@ export class UseRepository implements IUserRepository {
       throw error;
     }
   }
+  async userGet(id: number): Promise<IUserModel[]> {
+    try {
+      return await knex('user').select().where({ id });
+    } catch (error: any) {
+      throw error;
+    }
+  }
+  async userGetEmail(email: string): Promise<IUserModel> {
+    try {
+      return await knex('user').select().where({ email }).first();
+    } catch (error: any) {
+      throw error;
+    }
+  }
+
   async userSave(body: IRequestField): Promise<IUserModel> {
     try {
       return await knex('user').insert(body);
@@ -22,15 +37,9 @@ export class UseRepository implements IUserRepository {
 
   async userUpdate(body: IRequestField, id: number) {
     try {
-      return await knex('user').update(body).where('id', id);
-    } catch (error: any) {
-      throw error;
-    }
-  }
-
-  async userGet(id: number): Promise<IUserModel[]> {
-    try {
-      return await knex('user').select().where('id', id);
+      let result = await knex('user').update(body).where({ id });
+      if (result) result = await knex('user').select('*').where({ id }).first();
+      return result;
     } catch (error: any) {
       throw error;
     }
@@ -38,7 +47,7 @@ export class UseRepository implements IUserRepository {
 
   async userDelete(id: number) {
     try {
-      return await knex('user').select().where('id', id).del();
+      return await knex('user').select().where({ id }).del();
     } catch (error: any) {
       throw error;
     }

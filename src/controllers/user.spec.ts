@@ -8,7 +8,6 @@ import {
   IIValidationYup,
   IRequestField,
 } from '../domain/interface-factory';
-import { IUserModel } from '../models/user-model';
 import { IUserRepository } from '../Repository/interface-repository';
 import { UseCaseClient } from './../domain/factory/userCase';
 
